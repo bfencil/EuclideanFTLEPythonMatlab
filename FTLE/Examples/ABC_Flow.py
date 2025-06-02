@@ -2,13 +2,13 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))  # Adjust for relative import
 
-from FTLE.Flat.FlatSurfaceMain import run_FTLE_3d  # Primary FTLE computation
+from FTLE.Code.FlatSurfaceMain import run_FTLE_3d  # Primary FTLE computation
 import h5py
 import numpy as np
 
 
 # --- Load the ABC flow data ---
-file_path = os.path.join(os.path.dirname(__file__), 'abc_flow_data.h5')
+file_path = os.path.join(os.path.dirname(__file__), rf'Data/abc_flow_data.h5')
 with h5py.File(file_path, 'r') as f:
     velocity_points = f['points'][:]                 # shape (M, 3)
     velocity_vectors = f['vectors'][:]               # shape (M, 3, T)
