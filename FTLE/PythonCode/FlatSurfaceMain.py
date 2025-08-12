@@ -15,7 +15,6 @@ def run_FTLE_2d(
     initial_time,
     final_time,
     time_steps,
-    time_independent=False,
     plot_ftle=False,
     save_plot_path=None
 ):
@@ -43,8 +42,7 @@ def run_FTLE_2d(
     initial_time_index,
     final_time_index,
     time_steps,
-    "Forward",
-    time_independent
+    "Forward"
 )
 
     ## Backward
@@ -57,8 +55,7 @@ def run_FTLE_2d(
     final_time_index,
     initial_time_index,
     time_steps,
-    "Backward",
-    time_independent
+    "Backward"
 )
 
     if plot_ftle:
@@ -77,8 +74,7 @@ def run_FTLE_3d(
     dt,
     initial_time,
     final_time,
-    time_steps,
-    time_independent=False,
+    time_steps
     plot_ftle=False,
     save_plot_path=None
 ):
@@ -107,8 +103,7 @@ def run_FTLE_3d(
     initial_time_index,
     final_time_index,
     time_steps,
-    "Forward",
-    time_independent
+    "Forward"
     )
 
 
@@ -123,8 +118,7 @@ def run_FTLE_3d(
     final_time_index,
     initial_time_index,
     time_steps,
-    "Backward",
-    time_independent
+    "Backward"
     )
 
 
@@ -148,8 +142,7 @@ def FTLE_2d(
     initial_time_index,
     final_time_index,
     time_steps,
-    direction,
-    time_independent=False
+    direction
 ):
     """
     Advects a uniform grid of particles using a sparse velocity field with RK4 integration.
@@ -180,9 +173,7 @@ def FTLE_2d(
         final_time_index = len(time_steps) - initial_time_index - 1
         initial_time_index = final_time_index
         final_time_index = temp_initial_time_index
-
-        if not time_independent:
-            velocity_vectors = velocity_vectors[:, :, ::-1]
+        velocity_vectors = velocity_vectors[:, :, ::-1]
         dt = -dt
 
     # --- Setup grid and particle data ---
@@ -200,7 +191,7 @@ def FTLE_2d(
 
     fine_time = fine_time[:-1]  # Exclude final point (we advect up to t_index + 1)
 
-    trajectories = RK4_advection_2d(velocity_points, velocity_vectors, trajectories, dt, fine_time, time_independent)
+    trajectories = RK4_advection_2d(velocity_points, velocity_vectors, trajectories, dt, fine_time)
 
     # --- Compute FTLE from reshaped results ---
     x_traj = trajectories[:, 0, :].reshape(x_dim1, x_dim2, fine_time_length)
@@ -228,8 +219,7 @@ def FTLE_3d(
     initial_time_index,
     final_time_index,
     time_steps,
-    direction,
-    time_independent=False
+    direction
 ):
     """
     Advects a uniform 3D grid of particles using a sparse or dense velocity field with RK4 integration.
@@ -258,9 +248,7 @@ def FTLE_3d(
         final_time_index = len(time_steps) - initial_time_index - 1
         initial_time_index = final_time_index
         final_time_index = temp_initial_time_index
-
-        if not time_independent:
-            velocity_vectors = velocity_vectors[:, :, ::-1]
+        velocity_vectors = velocity_vectors[:, :, ::-1]
         dt = -dt
 
     # --- Grid setup ---
@@ -286,7 +274,7 @@ def FTLE_3d(
 
 
     ## particle Advection
-    trajectories = RK4_advection_3d(velocity_points, velocity_vectors, trajectories, dt, fine_time, time_independent)
+    trajectories = RK4_advection_3d(velocity_points, velocity_vectors, trajectories, dt, fine_time)
 
 
     # --- Reshape trajectories and compute FTLE ---
@@ -303,3 +291,4 @@ def FTLE_3d(
 
         
     return ftle, trajectories, isotropy
+
