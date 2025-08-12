@@ -52,7 +52,7 @@ def RK4_advection_3d(velocity_points, velocity_vectors, trajectories, dt, fine_t
 
     return trajectories
 
-def RK4_advection_2d(velocity_points, velocity_vectors, trajectories, dt, fine_time, time_independent):
+def RK4_advection_2d(velocity_points, velocity_vectors, trajectories, dt, fine_time):
 
     def interpolate(floor_data, ceiling_data, t_fraction):
         return t_fraction*ceiling_data + (1-t_fraction)*floor_data
@@ -88,6 +88,7 @@ def RK4_advection_2d(velocity_points, velocity_vectors, trajectories, dt, fine_t
         trajectories[:, 1, t_index + 1] = y_next
         
     return trajectories
+
 
 
 
