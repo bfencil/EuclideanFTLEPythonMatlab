@@ -20,10 +20,6 @@ y = np.linspace(0, 2*np.pi, 10)
 z = np.linspace(0, 2*np.pi, 10)
 X, Y, Z = np.meshgrid(x, y, z, indexing='ij')
 
-X = X.T
-Y = Y.T
-Z = Z.T
-
 # --- FTLE parameters ---
 initial_time = time_steps[0]
 final_time = 4
@@ -43,6 +39,7 @@ ftle, traj, iso, bftle, btraj, biso = run_FTLE_3d(
     plot_ftle=True,
     save_plot_path=None  # or a path like 'abc_ftle_output.png'
 )
+
 
 
 
