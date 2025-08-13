@@ -36,8 +36,9 @@ function [ftle, trajectories, isotropy, back_ftle, back_trajectories, back_isotr
 
     if plot_ftle
         particles_positions = [x_grid_parts(:), y_grid_parts(:), z_grid_parts(:)];
-        plot_FTLE_3D(particles_positions, ftle, isotropy, ...
+        Plot_FTLE_3D(particles_positions, ftle, isotropy, ...
                      back_ftle, back_isotropy, initial_time, final_time, save_plot_path);
     end
 end
+
 
