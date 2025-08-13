@@ -83,7 +83,7 @@ def _rk4_step(pos, dt, points, vec_floor, vec_ceil, frac, k):
 # ---------------------------------
 
 @njit(cache=True)
-def RK4_advection_2d(velocity_points, velocity_vectors, trajectories, dt, fine_time, k=8):
+def RK4_advection_2d(velocity_points, velocity_vectors, trajectories, dt, fine_time, k=4):
     """
     Time-dependent 2D advection using Numba + IDW interpolation.
 
@@ -159,3 +159,4 @@ def RK4_advection_3d(velocity_points, velocity_vectors, trajectories, dt, fine_t
             trajectories[i, 2, t_index + 1] = nxt[2]
 
     return trajectories
+
