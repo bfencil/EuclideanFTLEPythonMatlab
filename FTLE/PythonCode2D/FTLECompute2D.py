@@ -33,7 +33,6 @@ def FTLE_2d_compute(x_initial, y_initial, x_final, y_final, initial_time, final_
 
 
             if dx == 0 or dy == 0:
-                print("Zero differential")
                 continue
 
             # Compute finite difference deformation gradient ∂Xf/∂X0
@@ -46,7 +45,6 @@ def FTLE_2d_compute(x_initial, y_initial, x_final, y_final, initial_time, final_
             C = F.T @ F
 
             if np.isnan(C).any() or np.isinf(C).any():
-                print("Nan Value")
                 continue
 
             # Maximum eigenvalue of C
@@ -60,3 +58,4 @@ def FTLE_2d_compute(x_initial, y_initial, x_final, y_final, initial_time, final_
             isotropy[i,j] = (1 / (2 * time)) * np.log(np.linalg.det(C))
 
     return FTLE.flatten(), isotropy.flatten()
+
