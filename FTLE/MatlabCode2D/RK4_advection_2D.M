@@ -1,4 +1,4 @@
-function trajectories = RK4_advection_2d(velocity_points, velocity_vectors, trajectories, dt, fine_time)
+function trajectories = RK4_advection_2D(velocity_points, velocity_vectors, trajectories, dt, fine_time)
 %RK4_ADVECTION_2D  MATLAB version of the Python RK4 advection (2D).
 %
 % Inputs:
