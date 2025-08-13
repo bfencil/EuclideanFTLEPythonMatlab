@@ -1,0 +1,142 @@
+import numpy as np
+from FTLE.PythonCode2D.FTLECompute import FTLE_2d_compute
+from FTLE.PythonCode2D.utilities import plot_FTLE_2d, subdivide_time_steps
+from FTLE.PythonCode2D.advection import RK4_advection_2d
+
+
+
+def run_FTLE_2d(
+    velocity_points,
+    velocity_vectors,
+    x_grid_parts,
+    y_grid_parts,
+    dt,
+    initial_time,
+    final_time,
+    time_steps,
+    plot_ftle=False,
+    save_plot_path=None
+):
+
+    if initial_time not in time_steps or final_time not in time_steps:
+        raise ValueError("Initial and final times must be in `time_steps`.")
+
+    if initial_time >= final_time:
+        raise ValueError("initial_time must be less than or equal to final_time")
+
+    if dt > 1 or dt <= 0:
+        raise ValueError("Error: dt must be in the interval (0,1]")
+        
+    initial_time_index = index = np.where(time_steps == initial_time)[0][0]
+    final_time_index = index = np.where(time_steps == final_time)[0][0]
+
+
+    ## Forward
+    ftle, trajectories, isotropy = FTLE_2d(
+    velocity_points,
+    velocity_vectors,
+    x_grid_parts,
+    y_grid_parts,
+    dt,
+    initial_time_index,
+    final_time_index,
+    time_steps,
+    "Forward"
+)
+
+    ## Backward
+    back_ftle, back_trajectories, back_isotropy = FTLE_2d(
+    velocity_points,
+    velocity_vectors,
+    x_grid_parts,
+    y_grid_parts,
+    dt,
+    final_time_index,
+    initial_time_index,
+    time_steps,
+    "Backward"
+)
+
+    if plot_ftle:
+        particles = np.vstack([x_grid_parts.flatten(), y_grid_parts.flatten()]).T
+        plot_FTLE_2d(x_grid_parts, y_grid_parts, ftle, isotropy, back_ftle, back_isotropy, initial_time, final_time, save_plot_path=save_plot_path)
+        
+
+    return ftle, trajectories, isotropy, back_ftle, back_trajectories, back_isotropy
+
+
+
+
+def FTLE_2d(
+    velocity_points,
+    velocity_vectors,
+    x_grid_parts,
+    y_grid_parts,
+    dt,
+    initial_time_index,
+    final_time_index,
+    time_steps,
+    direction
+):
+    """
+    Advects a uniform grid of particles using a sparse velocity field with RK4 integration.
+
+    Parameters:
+        velocity_points (ndarray): (M, 2) array of known velocity locations, fixed in time.
+        velocity_vectors (ndarray): (M, 2) or (M, 2, T) array of velocity vectors at those locations.
+        x_grid_parts (ndarray): 2D array of X-coordinates from np.meshgrid.
+        y_grid_parts (ndarray): 2D array of Y-coordinates from np.meshgrid.
+        dt (float): Time step size for integration (0 < dt <= 1).
+        initial_time (int): Start index for advection.
+        final_time (int): End index for advection.
+        time_steps (ndarray): 1D array of integer time steps.
+        direction (str): "forward" or "backward" advection.
+        time_indepedent (bool): Whether the velocity field is time-independent.
+
+    Returns:
+        ftle (ndarray): Flattened array of FTLE values.
+        trajectories (ndarray): (N, 2, T) array of particle positions over time.
+    """
+
+
+    direction = direction.lower()
+    if direction == "backward":
+
+        # Reverse time indexing
+        temp_initial_time_index = len(time_steps) - final_time_index - 1
+        final_time_index = len(time_steps) - initial_time_index - 1
+        initial_time_index = final_time_index
+        final_time_index = temp_initial_time_index
+        velocity_vectors = velocity_vectors[:, :, ::-1]
+        dt = -dt
+
+    # --- Setup grid and particle data ---
+    x_dim1, x_dim2 = x_grid_parts.shape
+    y_dim1, y_dim2 = y_grid_parts.shape
+
+    particles_positions = np.vstack([x_grid_parts.flatten(), y_grid_parts.flatten()]).T
+    num_particles = particles_positions.shape[0]
+
+    fine_time = subdivide_time_steps(time_steps[initial_time_index:final_time_index + 1], np.abs(dt))
+    fine_time_length = len(fine_time)
+
+    trajectories = np.zeros((num_particles, 2, fine_time_length))
+    trajectories[:, :, 0] = particles_positions
+
+    fine_time = fine_time[:-1]  # Exclude final point (we advect up to t_index + 1)
+
+    trajectories = RK4_advection_2d(velocity_points, velocity_vectors, trajectories, dt, fine_time)
+
+    # --- Compute FTLE from reshaped results ---
+    x_traj = trajectories[:, 0, :].reshape(x_dim1, x_dim2, fine_time_length)
+    y_traj = trajectories[:, 1, :].reshape(y_dim1, y_dim2, fine_time_length)
+
+    ftle, isotropy = FTLE_2d_compute(
+        x_grid_parts, y_grid_parts,
+        x_traj[:, :, -1], y_traj[:, :, -1],
+        time_steps[initial_time_index],
+        time_steps[final_time_index]
+    )
+
+
+    return ftle, trajectories, isotropy
