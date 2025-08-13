@@ -1,14 +1,14 @@
-function [ftle, trajectories, isotropy] = FTLE_2d( ...
+function [ftle, trajectories, isotropy] = FTLE_2D( ...
     velocity_points, velocity_vectors, x_grid_parts, y_grid_parts, ...
     dt, initial_time_index, final_time_index, time_steps, direction)
-%FTLE_2d  Driver that advects particles and computes FTLE (MATLAB port)
+%FTLE_2D  Driver that advects particles and computes FTLE (MATLAB port)
 %
 % Inputs follow the Python version. direction = 'forward' or 'backward'.
 %
 % Outputs
-%   ftle          : [Nx*Ny x 1] (flattened) or however FTLE_2d_compute returns
+%   ftle          : [Nx*Ny x 1] (flattened) or however FTLE_2D_compute returns
 %   trajectories  : [Nparticles x 2 x K] positions across fine-time
-%   isotropy      : whatever FTLE_2d_compute returns for isotropy
+%   isotropy      : whatever FTLE_2D_compute returns for isotropy
 
     direction = lower(string(direction));
 
@@ -50,14 +50,14 @@ function [ftle, trajectories, isotropy] = FTLE_2d( ...
     end
 
     % advance
-    trajectories = RK4_advection_2d(velocity_points, velocity_vectors, ...
+    trajectories = RK4_advection_2D(velocity_points, velocity_vectors, ...
                                     trajectories, dt, fine_time_eval);
 
     % reshape for FTLE compute at final time slice
     x_traj = reshape(trajectories(:, 1, :), nx, ny, K);
     y_traj = reshape(trajectories(:, 2, :), nx, ny, K);
 
-    [ftle, isotropy] = FTLE_2d_compute( ...
+    [ftle, isotropy] = FTLE_2D_compute( ...
         x_grid_parts, y_grid_parts, ...
         x_traj(:, :, end), y_traj(:, :, end), ...
         time_steps(initial_time_index), time_steps(final_time_index));
