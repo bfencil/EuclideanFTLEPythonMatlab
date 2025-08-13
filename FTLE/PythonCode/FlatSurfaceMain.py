@@ -74,7 +74,7 @@ def run_FTLE_3d(
     dt,
     initial_time,
     final_time,
-    time_steps
+    time_steps,
     plot_ftle=False,
     save_plot_path=None
 ):
@@ -291,5 +291,6 @@ def FTLE_3d(
 
         
     return ftle, trajectories, isotropy
+
 
 
