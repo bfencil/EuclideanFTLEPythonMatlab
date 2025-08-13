@@ -162,9 +162,10 @@ def plot_FTLE_3d(coords, ftle, isotropy, back_ftle, back_isotropy, initial_time,
     
     # Save or show the figure
     if save_plot_path:
-        plt.savefig(save_path, dpi=300)
+        plt.savefig(save_plot_path, dpi=300)
         plt.close(fig)
 
     plt.show()
 
     return None
+
