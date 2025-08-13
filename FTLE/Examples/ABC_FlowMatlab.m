@@ -27,9 +27,9 @@ else
 end
 
 %% Define the 3D seeding grid (inside domain)
-x = linspace(0, 2*pi, 10);
-y = linspace(0, 2*pi, 10);
-z = linspace(0, 2*pi, 10);
+x = linspace(0, 2*pi, 30);
+y = linspace(0, 2*pi, 30);
+z = linspace(0, 2*pi, 30);
 
 % Use ndgrid to match Python’s indexing='ij' without transposes
 [X, Y, Z] = ndgrid(x, y, z);
