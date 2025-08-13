@@ -2,7 +2,7 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))  # Adjust for relative import
 
-from FTLE.PythonCode.FlatSurfaceMain import run_FTLE_3d  # Primary FTLE computation
+from FTLE.PythonCode3D.FlatFTLEMain3D import run_FTLE_3d  # Primary FTLE computation
 import h5py
 import numpy as np
 
@@ -43,6 +43,7 @@ ftle, traj, iso, bftle, btraj, biso = run_FTLE_3d(
     plot_ftle=True,
     save_plot_path=None  # or a path like 'abc_ftle_output.png'
 )
+
 
 
 
