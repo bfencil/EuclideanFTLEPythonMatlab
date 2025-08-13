@@ -1,6 +1,3 @@
-I decided to get rid of the the time_independent functionality could you rewrite the new code to be numba compatiable
-
-
 from scipy.interpolate import LinearNDInterpolator
 import numpy as np
 
@@ -91,6 +88,7 @@ def RK4_advection_2d(velocity_points, velocity_vectors, trajectories, dt, fine_t
         trajectories[:, 1, t_index + 1] = y_next
         
     return trajectories
+
 
 
 
