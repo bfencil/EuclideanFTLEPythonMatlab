@@ -1,4 +1,4 @@
-% BickleyFlow2D_Example.m
+% BickleyFlowMatlab.M
 % Example usage of the 2D FTLE pipeline on Bickley flow data.
 
 % --- Add MatlabCode2D folder to path ---
