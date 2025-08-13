@@ -145,14 +145,15 @@ def FTLE_3d(
     z_traj = trajectories[:, 2, :].reshape(z_dim1, z_dim2, z_dim3, fine_time_length)
 
     ftle, isotropy = FTLE_3d_compute(
-        x_grid_parts, y_grid_parts, z_grid_parts.T,
-        x_traj[:, :, :, -1], y_traj[:, :, :, -1], z_traj[:, :, :, -1].T,
+        x_grid_parts, y_grid_parts, z_grid_parts,
+        x_traj[:, :, :, -1], y_traj[:, :, :, -1], z_traj[:, :, :, -1],
         time_steps[initial_time_index],
         time_steps[final_time_index]
     )
 
         
     return ftle, trajectories, isotropy
+
 
 
 
