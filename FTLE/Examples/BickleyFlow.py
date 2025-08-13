@@ -14,8 +14,8 @@ with h5py.File(file_path, 'r') as f:
     time_steps = f['time_steps'][:]                  # shape (T,)
 
 # --- Define 2D grid for particle seeding (must be inside domain) ---
-x = np.linspace(0, 10, 120)
-y = np.linspace(-3, 3, 120)
+x = np.linspace(0, 10, 80)
+y = np.linspace(-3, 3, 80)
 X, Y = np.meshgrid(x, y)
 
 # Swap the rows and columns
@@ -40,6 +40,7 @@ ftle, traj, iso, bftle, btraj, biso = run_FTLE_2d(
     plot_ftle=True,
     save_plot_path=None  # or provide a path like 'bickley_ftle_output.png'
 )
+
 
 
 
