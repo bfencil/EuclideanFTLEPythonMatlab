@@ -1,7 +1,7 @@
 import numpy as np
-from FTLE.PythonCode3D.FTLECompute import  FTLE_3d_compute
+from FTLE.PythonCode3D.FTLECompute3D import  FTLE_3d_compute
 from FTLE.PythonCode3D.utilities import plot_FTLE_3d, subdivide_time_steps
-from FTLE.PythonCode3D.advection import RK4_advection_3d
+from FTLE.PythonCode3D.advection3D import RK4_advection_3d
 
 
 
@@ -153,4 +153,5 @@ def FTLE_3d(
 
         
     return ftle, trajectories, isotropy
+
 
