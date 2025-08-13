@@ -16,7 +16,7 @@ x = linspace(0, 10, 80);
 y = linspace(-3, 3, 80);
 [X, Y] = meshgrid(x, y);
 
-% Swap rows/columns (transpose like Python code)
+% Swap rows/columns 
 X = X';
 Y = Y';
 
